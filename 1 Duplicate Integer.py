@@ -12,30 +12,47 @@
 # 
 
 # %%
-from typing import List, Dict
+from typing import List
+import random
 
-class Solution:
-    def hasDuplicate(self, nums: List[int]) -> bool:
-        seen = set()
+# Test Case Generator
+def generator():
+    # Test Params
+    numberofBatches = 5
+    startingTestsPerBatch = 10
+    rateofTestsPerBatchIncrease = 2
+    maxIntValue = 99
+    
+    previousBatchSize = 0
+    testBatches = []
+    for batchNum in range(numberofBatches):
+        if batchNum == 0:
+            batchSize = startingTestsPerBatch
+        else:
+            batchSize = previousBatchSize * rateofTestsPerBatchIncrease
         
-        for n in nums:
-            if n in seen:
-                return True
-            seen.add(n)
-        return False
+        # build the batch
+        testBatch = []
+        for _ in range(batchSize):
+            testBatch.append(random.randint(0, int(maxIntValue))) 
+        testBatches.append(testBatch)            
 
-# %% [markdown]
-# Test Case Generator and Verifier.
+        previousBatchSize = batchSize
+        return testBatches        
 
 # %%
-class Testing:
-    def testGenerator(self):
-        # Test Params
-        numberofbatches = 10
-        testPerBatch = 10
-        maxValue = 100
-        rateofvalueincrease = 10
+# Hashset Solution
+def hasDuplicateHashset(nums: List[int]) -> bool:
+    seen = set()
+    
+    for n in nums:
+        if n in seen:
+            return True
+        seen.add(n)
+    return False
 
-        
+# %%
+def main():
+    
 
 
