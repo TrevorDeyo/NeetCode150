@@ -16,19 +16,18 @@
 from typing import List
 import random
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+#from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Test Case Generator
 def generator():
     # Test Params
-    numberofBatches = 35
+    numberofBatches = 20
     startingTestsPerBatch = 10
     rateofTestsPerBatchIncrease = 1.5
     maxIntValue = int("9" * 9)
     
     genTime = time.time()
 
-    previousBatchSize = 0
     testBatches = []
     counter = 0
     for batchNum in range(numberofBatches):
@@ -36,15 +35,13 @@ def generator():
         if batchNum == 0:
             batchSize = startingTestsPerBatch
         else:
-            batchSize = previousBatchSize * rateofTestsPerBatchIncrease
+            batchSize *= int(rateofTestsPerBatchIncrease * (batchNum + 1))
         
         # build the batch
         testBatch = []
         for _ in range(int(batchSize)):
             testBatch.append(random.randint(0, maxIntValue))
         testBatches.append(testBatch)            
-
-        previousBatchSize = batchSize
 
         print(f"\rTest Gen Batch {counter + 1} Complete, Time Elasped: {time.time() - batchTime:.5f} seconds.")
         counter += 1
@@ -79,6 +76,10 @@ def hasDuplicateHashset(nums: List[int]) -> bool:
     return False
 
 # %%
+def hasDuplicateHashsetLength(nums: List[int]) -> bool:
+    return len(set(nums)) < len(nums)
+
+# %%
 def perfTest(func, testBatches):
     algoName = func.__name__
     perfTestTime = time.time()
@@ -104,7 +105,8 @@ def main():
     print("Performing Performance Test")
     perfTest(hasDuplicateSorting, testBatches)
     perfTest(hasDuplicateHashset, testBatches)
-    #perfTest(hasDuplicateBruteForce, testBatches)
+    perfTest(hasDuplicateHashsetLength, testBatches)
+    perfTest(hasDuplicateBruteForce, testBatches)
 
     print(f"Program Exec Complete... time elasped: {time.time() - mainTime:.5f} seconds.")
 
