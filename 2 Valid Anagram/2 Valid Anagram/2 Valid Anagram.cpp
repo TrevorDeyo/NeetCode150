@@ -7,7 +7,6 @@
 #include <random>
 #include <utility>
 #include <map>
-#include <print>
 
 // Function to generate strings
 std::string generateRandomString(int wordLength, std::mt19937 rng) {
@@ -36,10 +35,7 @@ std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPai
 
         testPair.first = generateRandomString(wordLength, rng);
 
-        
         int anagram = isAnagram(rng);
-
-        std::cout << anagram << '\n';
 
         if (anagram == 1) {
             std::string secWord = testPair.first;
@@ -77,7 +73,7 @@ bool isAnagram(std::pair<std::string, std::string> testPair) {
 
 int main()
 {
-    size_t numPairs = 100; // Generate X anagram and X non-anagram pairs
+    size_t numPairs = 100000; // Generate X anagram and X non-anagram pairs
     int wordMinLength = 5;
     int wordMaxLength = 10;
 
@@ -90,11 +86,9 @@ int main()
             //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: Yes" << '\n';
             numAnagrams++;
         }
-        /*
         else {
-            std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
+            //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
         }
-        */
     }
     std::cout << "there are " << numAnagrams << '\n';
 }
