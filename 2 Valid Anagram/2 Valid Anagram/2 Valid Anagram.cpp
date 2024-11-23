@@ -9,7 +9,8 @@
 #include <map>
 
 // Function to generate strings
-std::string generateRandomString(int wordLength, std::mt19937 rng) {
+std::string generateRandomString(int wordLength, std::mt19937 rng)
+{
     std::string word = "";
     std::uniform_int_distribution<int> dist('a', 'z');
     for (int lengthStep = 0; lengthStep < wordLength; lengthStep++) {
@@ -19,8 +20,8 @@ std::string generateRandomString(int wordLength, std::mt19937 rng) {
 }
 
 // Function to generate anagram and non-anagram pairs
-std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPairs, int wordMinLength, int wordMaxLength) {
-    
+std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPairs, int wordMinLength, int wordMaxLength)
+{    
     std::vector<std::pair<std::string, std::string>> pairs;
     
     std::mt19937 rng(std::random_device{}());
@@ -50,7 +51,9 @@ std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPai
     return pairs;
 }
 
-bool isAnagram(std::pair<std::string, std::string> testPair) {
+// my anagram solution
+bool isAnagramMySolution(std::pair<std::string, std::string> testPair)
+{
     // quick length check
     if (testPair.first.length() != testPair.second.length()) {
         return false;
@@ -71,6 +74,18 @@ bool isAnagram(std::pair<std::string, std::string> testPair) {
     return true;
 }
 
+bool isAnagramSorting(std::pair<std::string, std::string> testPair)
+{
+    if (testPair.first.length() != testPair.second.length()) {
+        return false;
+    }
+
+    std::sort(testPair.first.begin(), testPair.second.end());
+    std::sort(testPair.first.begin(), testPair.second.end());
+    return testPair.first == testPair.second;
+}
+
+
 int main()
 {
     size_t numPairs = 100000; // Generate X anagram and X non-anagram pairs
@@ -82,7 +97,7 @@ int main()
     // Print generated pairs
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
-        if (isAnagram(pair)) {
+        if (isAnagramMySolution(pair)) {
             //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: Yes" << '\n';
             numAnagrams++;
         }
