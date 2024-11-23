@@ -7,6 +7,7 @@
 #include <random>
 #include <utility>
 #include <map>
+#include <print>
 
 // Function to generate strings
 std::string generateRandomString(int wordLength, std::mt19937 rng) {
@@ -35,9 +36,13 @@ std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPai
 
         testPair.first = generateRandomString(wordLength, rng);
 
+        
         int anagram = isAnagram(rng);
+
+        std::cout << anagram << '\n';
+
         if (anagram == 1) {
-            std::string secWord = generateRandomString(wordLength, rng);
+            std::string secWord = testPair.first;
             std::shuffle(secWord.begin(), secWord.end(), rng);
             testPair.second = secWord;
         }
@@ -74,17 +79,22 @@ int main()
 {
     size_t numPairs = 100; // Generate X anagram and X non-anagram pairs
     int wordMinLength = 5;
-    int wordMaxLength = 5;
+    int wordMaxLength = 10;
 
     auto testPairs = generateTestPairs(numPairs, wordMinLength, wordMaxLength);
-
+    
     // Print generated pairs
+    size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
         if (isAnagram(pair)) {
-            std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: Yes" << '\n';
+            //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: Yes" << '\n';
+            numAnagrams++;
         }
+        /*
         else {
             std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
         }
+        */
     }
+    std::cout << "there are " << numAnagrams << '\n';
 }
