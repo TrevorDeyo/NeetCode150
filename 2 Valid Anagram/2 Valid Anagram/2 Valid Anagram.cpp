@@ -7,6 +7,7 @@
 #include <random>
 #include <utility>
 #include <map>
+#include <chrono>
 
 // Function to generate strings
 std::string generateRandomString(int wordLength, std::mt19937 rng)
