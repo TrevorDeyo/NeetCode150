@@ -7,19 +7,19 @@
 #include <random>
 
 // Function to generate anagram and non-anagram pairs
-std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPairs, int minLength, int maxLength) {
+std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPairs, int wordMinLen, int wordMaxLen) {
     std::vector<std::pair<std::string, std::string>> pairs;
     static std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<> lengthDist(5, 10);
+    std::uniform_int_distribution<> lengthDist(wordMinLen, wordMaxLen);
 }
 
 int main()
 {
     size_t numPairs = 10; // Generate X anagram and X non-anagram pairs
-    int minLength = 5;
-    int maxLength = 10;
+    int wordMinLen = 5;
+    int wordMaxLen = 10;
 
-    auto testPairs = generateTestPairs(numPairs, minLength, maxLength);
+    auto testPairs = generateTestPairs(numPairs, wordMinLen, wordMaxLen);
 
     // Print generated pairs
     for (const auto& pair : testPairs) {
