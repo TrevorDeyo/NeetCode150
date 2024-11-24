@@ -7,6 +7,7 @@
 #include <random>
 #include <utility>
 #include <map>
+#include <unordered_map>
 #include <chrono>
 
 // Function to generate strings
@@ -86,15 +87,43 @@ bool isAnagramSorting(std::pair<std::string, std::string> testPair)
     return testPair.first == testPair.second;
 }
 
+bool isAnagramHashTable(std::pair<std::string, std::string> testPair) {
+    if (testPair.first.length() != testPair.second.length()) {
+        return false;
+    }
 
-int main()
-{
-    size_t numPairs = 100000; // Generate X anagram and X non-anagram pairs
-    int wordMinLength = 5;
-    int wordMaxLength = 10;
+    std::unordered_map<char, int> countS;
+    std::unordered_map<char, int> countT;
+    for (int i = 0; i < testPair.first.length(); i++) {
+        countS[testPair.first[i]]++;
+        countT[testPair.second[i]]++;
+    }
+    return countS == countT;
+}
 
-    auto testPairs = generateTestPairs(numPairs, wordMinLength, wordMaxLength);
-    
+bool isAnagramHashTableOptimal(std::pair<std::string, std::string> testPair) {
+    if (testPair.first.length() != testPair.second.length()) {
+        return false;
+    }
+
+    std::vector<int> count(26, 0);
+    for (int i = 0; i < testPair.first.length(); i++) {
+        count[testPair.first[i] - 'a']++;
+        count[testPair.second[i] - 'a']--;
+    }
+
+    for (int val : count) {
+        if (val != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void speedTest(std::vector, std::pair<std::string, std::string> testPair, bool (*algo)(std::pair<std::string, std::string>) {
+
+    return algo()
+
     // Print generated pairs
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
@@ -103,8 +132,16 @@ int main()
             numAnagrams++;
         }
         else {
-            //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
-        }
+        //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
     }
-    std::cout << "there are " << numAnagrams << '\n';
+std::cout << "there are " << numAnagrams << '\n';
+}
+
+int main()
+{
+    size_t numPairs = 100000; // Generate X anagram and X non-anagram pairs
+    int wordMinLength = 5;
+    int wordMaxLength = 10;
+
+    auto testPairs = generateTestPairs(numPairs, wordMinLength, wordMaxLength);
 }
