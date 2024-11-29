@@ -122,10 +122,17 @@ bool isAnagramHashTableOptimal(std::pair<std::string, std::string> testPair) {
 
 void speedTest(std::vector<std::pair<std::string, std::string>> testPairs, bool (*algo)(std::pair<std::string, std::string>)) {
     
+    // Start Clock
+
+    // maybe count the engrams? not neccisarily neccisary but would be nice to double check the algos counts
     size_t numAnagrams = 0;
+    
     for (const auto& pair : testPairs) {
         algo(pair);
     }
+
+    // Stop Clock
+    // Print Clock
 }
 
 int main()
