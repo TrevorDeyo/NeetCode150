@@ -120,21 +120,12 @@ bool isAnagramHashTableOptimal(std::pair<std::string, std::string> testPair) {
     return true;
 }
 
-void speedTest(std::vector, std::pair<std::string, std::string> testPair, bool (*algo)(std::pair<std::string, std::string>) {
-
-    return algo()
-
-    // Print generated pairs
+void speedTest(std::vector<std::pair<std::string, std::string>> testPairs, bool (*algo)(std::pair<std::string, std::string>)) {
+    
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
-        if (isAnagramMySolution(pair)) {
-            //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: Yes" << '\n';
-            numAnagrams++;
-        }
-        else {
-        //std::cout << "String 1: " << pair.first << ", String 2: " << pair.second << " Anagram?: No" << '\n';
+        algo(pair);
     }
-std::cout << "there are " << numAnagrams << '\n';
 }
 
 int main()
@@ -144,4 +135,9 @@ int main()
     int wordMaxLength = 10;
 
     auto testPairs = generateTestPairs(numPairs, wordMinLength, wordMaxLength);
+    speedTest(testPairs, isAnagramMySolution);
+    speedTest(testPairs, isAnagramSorting);
+    speedTest(testPairs, isAnagramHashTable);
+    speedTest(testPairs, isAnagramHashTableOptimal);
+    return 0;
 }
