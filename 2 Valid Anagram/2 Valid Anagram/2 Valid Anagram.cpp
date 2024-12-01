@@ -126,11 +126,14 @@ void speedTest(std::vector<std::pair<std::string, std::string>> testPairs, bool 
     // Count the engrams
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
-        algo(pair);
+        if (algo(pair)) {
+            numAnagrams += 1;
     }
 
     // Stop Clock
+    auto stop = std::chrono::high_resolution_clock::now();
     // Print Clock
+    std::cout << (stop - start) << "ms?" << "\n"
 }
 
 int main()
