@@ -10,7 +10,7 @@
 #include <chrono>
 
 // Function to generate strings
-std::string generateRandomString(int wordLength, std::mt19937 rng)
+std::string generateRandomString(int wordLength, std::mt19937& rng)
 {
     std::string word = "";
     std::uniform_int_distribution<int> dist('a', 'z');
@@ -23,8 +23,8 @@ std::string generateRandomString(int wordLength, std::mt19937 rng)
 // Function to generate anagram and non-anagram pairs
 std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPairs, int wordMinLength, int wordMaxLength)
 {    
+    // initilizing rng engine
     std::vector<std::pair<std::string, std::string>> pairs;
-    
     std::mt19937 rng(std::random_device{}());
 
     for (int pairStep = 0; pairStep < numPairs; pairStep++) {
@@ -53,7 +53,7 @@ std::vector<std::pair<std::string, std::string>> generateTestPairs(size_t numPai
 }
 
 // my anagram solution
-bool isAnagramMySolution(std::pair<std::string, std::string> testPair)
+bool isAnagramMySolution(const std::pair<std::string, std::string>& testPair)
 {
     // quick length check
     if (testPair.first.length() != testPair.second.length()) {
@@ -75,18 +75,21 @@ bool isAnagramMySolution(std::pair<std::string, std::string> testPair)
     return true;
 }
 
-bool isAnagramSorting(std::pair<std::string, std::string> testPair)
+bool isAnagramSorting(const std::pair<std::string, std::string>& testPair)
 {
     if (testPair.first.length() != testPair.second.length()) {
         return false;
     }
 
-    std::sort(testPair.first.begin(), testPair.first.end());
-    std::sort(testPair.second.begin(), testPair.second.end());
-    return testPair.first == testPair.second;
+    std::string first = testPair.first;
+    std::string second = testPair.second;
+
+    std::sort(first.begin(), first.end());
+    std::sort(second.begin(), second.end());
+    return first == second;
 }
 
-bool isAnagramHashTable(std::pair<std::string, std::string> testPair) {
+bool isAnagramHashTable(const std::pair<std::string, std::string>& testPair) {
     if (testPair.first.length() != testPair.second.length()) {
         return false;
     }
@@ -100,7 +103,7 @@ bool isAnagramHashTable(std::pair<std::string, std::string> testPair) {
     return countS == countT;
 }
 
-bool isAnagramHashTableOptimal(std::pair<std::string, std::string> testPair) {
+bool isAnagramHashTableOptimal(const std::pair<std::string, std::string>& testPair) {
     if (testPair.first.length() != testPair.second.length()) {
         return false;
     }
@@ -119,20 +122,24 @@ bool isAnagramHashTableOptimal(std::pair<std::string, std::string> testPair) {
     return true;
 }
 
-void speedTest(std::vector<std::pair<std::string, std::string>> testPairs, bool (*algo)(std::pair<std::string, std::string>)) {
+void speedTest(const std::vector<std::pair<std::string, std::string>>& testPairs,
+                bool (*algo)(const std::pair<std::string, std::string>&),
+                const std::string& algoName) {
+    // Print algoName
+    std::cout << "Testing algorithum: " << algoName << "\n";
     // Start Clock
     auto start = std::chrono::high_resolution_clock::now();
-    // Count the engrams
+    // Count the Anagrams
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
-        if (algo(pair)) {
-            numAnagrams++;
-            }
+        if (algo(pair)) numAnagrams++;
         }
     // Stop Clock
     auto stop = std::chrono::high_resolution_clock::now();
-    // Print Clock
-    std::cout << (stop - start) << "\n";
+    // Print clock and anagram counts
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    std::cout << "Duration: " << duration.count() << " ms\n";
     std::cout << "Number of anagrams " << numAnagrams << "\n";
 }
 
@@ -143,9 +150,9 @@ int main()
     int wordMaxLength = 10;
 
     auto testPairs = generateTestPairs(numPairs, wordMinLength, wordMaxLength);
-    speedTest(testPairs, isAnagramMySolution);
-    speedTest(testPairs, isAnagramSorting);
-    speedTest(testPairs, isAnagramHashTable);
-    speedTest(testPairs, isAnagramHashTableOptimal);
+    speedTest(testPairs, isAnagramMySolution, "My Solution");
+    speedTest(testPairs, isAnagramSorting, "Sorting-Based Solution");
+    speedTest(testPairs, isAnagramHashTable, "Hash Table Solution");
+    speedTest(testPairs, isAnagramHashTableOptimal, "Hash Table Optimal Solution");
     return 0;
 }
