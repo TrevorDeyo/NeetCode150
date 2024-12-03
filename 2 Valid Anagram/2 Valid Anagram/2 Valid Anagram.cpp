@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <random>
 #include <utility>
-#include <map>
 #include <unordered_map>
 #include <chrono>
 
@@ -61,7 +60,7 @@ bool isAnagramMySolution(std::pair<std::string, std::string> testPair)
         return false;
     }
 
-    std::map<char, int> charCount;
+    std::unordered_map<char, int> charCount;
     for (char c : testPair.first) {
         charCount[c]++;
     }
@@ -82,8 +81,8 @@ bool isAnagramSorting(std::pair<std::string, std::string> testPair)
         return false;
     }
 
-    std::sort(testPair.first.begin(), testPair.second.end());
-    std::sort(testPair.first.begin(), testPair.second.end());
+    std::sort(testPair.first.begin(), testPair.first.end());
+    std::sort(testPair.second.begin(), testPair.second.end());
     return testPair.first == testPair.second;
 }
 
@@ -127,13 +126,14 @@ void speedTest(std::vector<std::pair<std::string, std::string>> testPairs, bool 
     size_t numAnagrams = 0;
     for (const auto& pair : testPairs) {
         if (algo(pair)) {
-            numAnagrams += 1;
-    }
-
+            numAnagrams++;
+            }
+        }
     // Stop Clock
     auto stop = std::chrono::high_resolution_clock::now();
     // Print Clock
-    std::cout << (stop - start) << "ms?" << "\n"
+    std::cout << (stop - start) << "\n";
+    std::cout << "Number of anagrams " << numAnagrams << "\n";
 }
 
 int main()
