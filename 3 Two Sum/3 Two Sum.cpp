@@ -17,15 +17,15 @@ vector<int> twoSum(vector<int>& nums, int target);
 int main()
 {
     vector<TestCase> TestCases = {
-        {{3,4,5,6}, 7, {0,1}, "Explanation: nums[0] + nums[1] == 7, so we return [0, 1]." },
-        {{4,5,6}, 7, {0,1}
-    { {3,4,5,6}, 7 }
-    { {3,4,5,6}, 7 }
+        {{3,4,5,6}, 7, {0,1}, "Explanation: nums[0] + nums[1] == 7, so we return {0, 1}." },
+        {{4,5,6}, 10, {0,2}, "Explanation: nums[0] + nums[2] == 10, so we return {0, 2}." },
+        {{5,5}, 10, {0,1}, "Explanation: nums[0] + nums[1] == 10, so we return {0, 1}." },
+    }
 
-    for (index )
-    twoSum();
-
-    cout << "Hello World!\n";
+    for (case: TestCases) {
+        ;
+    }
+    
     return 0;
 }
 
