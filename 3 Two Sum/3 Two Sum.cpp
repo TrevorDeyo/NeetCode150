@@ -22,7 +22,8 @@ int main()
     }
 
     for (case: TestCases) {
-        ;
+        nums = case.nums;
+
     }
     
     return 0;
