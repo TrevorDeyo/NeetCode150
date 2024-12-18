@@ -1,16 +1,20 @@
 #include <iostream>
 #include <vector>
-#include <string>
+#include <unordered_map>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 struct TestCase {
-    vector<int> nums;      // Input numbers
-    int target;            // Target Sum
-    vector<int> expected;  // Expected output
+    vector<int> nums;
+    int target;
 };
 
-vector<int> twoSum(const vector<int>& nums, int target) {
+// Brute Force Algorithm
+vector<int> twoSumBruteForce(const vector<int>& nums, int target) {
     for (size_t i = 0; i < nums.size(); ++i) {
         for (size_t j = i + 1; j < nums.size(); ++j) {
             if (nums[i] + nums[j] == target) {
@@ -18,48 +22,106 @@ vector<int> twoSum(const vector<int>& nums, int target) {
             }
         }
     }
-    return {}; // Return empty vector if no solution found
+    return {};
 }
 
-int main()
-{
-    vector<TestCase> testCases = {
-        {{3, 4, 5, 6}, 7, {0, 1}},
-        {{4, 5, 6}, 10, {0, 2}},
-        {{5, 5}, 10, {0, 1}}
-    };
+// Sorting-Based Algorithm
+vector<int> twoSumSorting(const vector<int>& nums, int target) {
+    vector<pair<int, int>> indexedNums;
+    for (size_t i = 0; i < nums.size(); ++i) {
+        indexedNums.emplace_back(nums[i], i);
+    }
+    sort(indexedNums.begin(), indexedNums.end());
+    size_t left = 0, right = nums.size() - 1;
 
-    for (size_t i = 0; i < testCases.size(); ++i) {
-        const TestCase& testCase = testCases[i];
-        vector<int> result = twoSum(testCase.nums, testCase.target);
-
-        // Print test case details
-        cout << "Test Case " << i + 1 << ":\n";
-        cout << "Input: nums = [";
-        for (size_t j = 0; j < testCase.nums.size(); ++j) {
-            cout << testCase.nums[j] << (j + 1 < testCase.nums.size() ? ", " : "");
+    while (left < right) {
+        int sum = indexedNums[left].first + indexedNums[right].first;
+        if (sum == target) {
+            return { indexedNums[left].second, indexedNums[right].second };
         }
-        cout << "], target = " << testCase.target << "\n";
-
-        cout << "Expected: [";
-        for (size_t j = 0; j < testCase.expected.size(); ++j) {
-            cout << testCase.expected[j] << (j + 1 < testCase.expected.size() ? ", " : "");
-        }
-        cout << "]\n";
-
-        cout << "Output: [";
-        for (size_t j = 0; j < result.size(); ++j) {
-            cout << result[j] << (j + 1 < result.size() ? ", " : "");
-        }
-        cout << "]\n";
-
-        if (result == testCase.expected) {
-            cout << "Test Passed!\n\n";
+        else if (sum < target) {
+            ++left;
         }
         else {
-            cout << "Test Failed!\n\n";
+            --right;
         }
     }
+    return {};
+}
+
+// Hashmap Two-Pass Algorithm
+vector<int> twoSumHashmapTwoPass(const vector<int>& nums, int target) {
+    unordered_map<int, int> indices;
+    for (size_t i = 0; i < nums.size(); ++i) {
+        indices[nums[i]] = i;
+    }
+    for (size_t i = 0; i < nums.size(); ++i) {
+        int complement = target - nums[i];
+        if (indices.count(complement) && indices[complement] != static_cast<int>(i)) {
+            return { static_cast<int>(i), indices[complement] };
+        }
+    }
+    return {};
+}
+
+// Hashmap One-Pass Algorithm
+vector<int> twoSumHashmapOnePass(const vector<int>& nums, int target) {
+    unordered_map<int, int> indices;
+    for (size_t i = 0; i < nums.size(); ++i) {
+        int complement = target - nums[i];
+        if (indices.count(complement)) {
+            return { indices[complement], static_cast<int>(i) };
+        }
+        indices[nums[i]] = i;
+    }
+    return {};
+}
+
+// Generate Random Test Cases
+vector<TestCase> generateRandomTestCases(int numCases, int arraySize, int valueRange) {
+    vector<TestCase> testCases;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(0, valueRange);
+
+    for (int i = 0; i < numCases; ++i) {
+        vector<int> nums(arraySize);
+        for (int& num : nums) {
+            num = dist(gen);
+        }
+        int target = dist(gen);
+        testCases.push_back({ nums, target });
+    }
+    return testCases;
+}
+
+// Measure Execution Time
+void measureAndPrintExecutionTime(const string& algoName, const vector<TestCase>& testCases,
+    vector<int>(*algo)(const vector<int>&, int)) {
+    auto start = high_resolution_clock::now();
+
+    for (const TestCase& testCase : testCases) {
+        algo(testCase.nums, testCase.target);
+    }
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start).count();
+    cout << algoName << " took " << duration << " ms to complete.\n";
+}
+
+int main() {
+    int numTestCases = 100000;
+    int arraySize = 100;
+    int valueRange = 100;
+
+    vector<TestCase> testCases = generateRandomTestCases(numTestCases, arraySize, valueRange);
+
+    cout << "Testing algorithms with " << numTestCases << " random test cases...\n";
+
+    measureAndPrintExecutionTime("Brute Force", testCases, twoSumBruteForce);
+    measureAndPrintExecutionTime("Sorting-Based", testCases, twoSumSorting);
+    measureAndPrintExecutionTime("Hashmap Two-Pass", testCases, twoSumHashmapTwoPass);
+    measureAndPrintExecutionTime("Hashmap One-Pass", testCases, twoSumHashmapOnePass);
 
     return 0;
 }
