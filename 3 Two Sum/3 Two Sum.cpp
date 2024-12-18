@@ -110,9 +110,9 @@ void measureAndPrintExecutionTime(const string& algoName, const vector<TestCase>
 }
 
 int main() {
-    int numTestCases = 100000;
-    int arraySize = 100;
-    int valueRange = 100;
+    int numTestCases = 1000000;
+    int arraySize = 1000;
+    int valueRange = 9;
 
     vector<TestCase> testCases = generateRandomTestCases(numTestCases, arraySize, valueRange);
 
