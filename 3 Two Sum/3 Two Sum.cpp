@@ -95,24 +95,31 @@ vector<TestCase> generateRandomTestCases(int numCases, int arraySize, int valueR
     return testCases;
 }
 
-// Measure Execution Time
+// Measure Execution Time and Count Valid Tests
 void measureAndPrintExecutionTime(const string& algoName, const vector<TestCase>& testCases,
     vector<int>(*algo)(const vector<int>&, int)) {
     auto start = high_resolution_clock::now();
 
+    int validCount = 0;
+
     for (const TestCase& testCase : testCases) {
-        algo(testCase.nums, testCase.target);
+        vector<int> result = algo(testCase.nums, testCase.target);
+        if (!result.empty() && testCase.nums[result[0]] + testCase.nums[result[1]] == testCase.target) {
+            ++validCount;
+        }
     }
 
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start).count();
+
     cout << algoName << " took " << duration << " ms to complete.\n";
+    cout << algoName << " found " << validCount << " valid results.\n\n";
 }
 
 int main() {
     int numTestCases = 1000000;
-    int arraySize = 1000;
-    int valueRange = 9;
+    int arraySize = 10;
+    int valueRange = 10;
 
     vector<TestCase> testCases = generateRandomTestCases(numTestCases, arraySize, valueRange);
 
